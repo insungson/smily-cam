@@ -123,7 +123,7 @@ export default () => {
   const savePhoto = useCallback(async (uri) => {
     try {
       //권한요청
-      const { status } = await Camera.requestPermissionsAsync();
+      const { status } = await MediaLibrary.requestPermissionsAsync();
       if (status === "granted") {
         //MediaLibrary의 asset을 만들고
         const asset = await MediaLibrary.createAssetAsync(uri);
