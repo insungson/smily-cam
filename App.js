@@ -130,9 +130,9 @@ export default () => {
         let album = await MediaLibrary.getAlbumAsync(ALBUM_NAME);
         //앨범의 유무에 따라 조건을 나눠서 처리
         if (album === null) {
-          album = await MediaLibrary.createAlbumAsync(ALBUM_NAME, asset);
+          album = await MediaLibrary.createAlbumAsync(ALBUM_NAME, asset, false);
         } else {
-          await MediaLibrary.addAssetsToAlbumAsync([asset], album.id);
+          await MediaLibrary.addAssetsToAlbumAsync([asset], album.id, false);
         }
         setTimeout(() => {
           setsmileDetected(false);
