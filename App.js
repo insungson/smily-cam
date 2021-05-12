@@ -36,6 +36,8 @@ const { width, height } = Dimensions.get("screen");
 
 const ALBUM_NAME = "Smiley Cam";
 
+const SMILE_PERCENT = 70;
+
 const CenterView = styled.View`
   flex: 1;
   justify-content: center;
@@ -48,6 +50,11 @@ const Text = styled.Text`
   font-size: 22px;
 `;
 
+const SmallText = styled.Text`
+  color: white;
+  font-size: 10px;
+`;
+
 const IconBar = styled.View`
   margin-top: 50px;
 `;
@@ -57,6 +64,7 @@ export default () => {
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.front);
   const [smileDetected, setsmileDetected] = useState(false);
   const [smilePercent, setSmilePercent] = useState(null);
+  const [takePhotoTrigger, setTakePhotoTrigger] = useState(false);
   const cameraRef = useRef();
 
   //useEffect는 반드시 함수만을 리턴해야 하기 때문에.. 아래와 같이 코드를 작성하면 에러가 발생한다...
@@ -94,9 +102,9 @@ export default () => {
     // console.log("faceConstants", faceConstants);
     const face = faceConstants?.faces[0];
     if (face) {
-      if (face.smilingProbability > 0.7) {
+      setSmilePercent(Math.ceil(face.smilingProbability * 100));
+      if (face.smilingProbability > Number.parseFloat(SMILE_PERCENT/100).toFixed(2)) {
         setsmileDetected(true);
-        setSmilePercent(Math.ceil(face.smilingProbability * 100));
         takePhoto();
       }
     }
@@ -151,9 +159,11 @@ export default () => {
       {hasPermission === true ? (
         <CenterView>
           <Text>Smile to take photo</Text>
-          {smilePercent && (
-            <Text>Your Smiling Percentage is {smilePercent}%</Text>
-          )}
+          <SmallText>Your Smiling Percentage is {smilePercent || 0}%</SmallText>
+          {smileDetected 
+            ? (<SmallText>Good Job!!</SmallText>) 
+            : (<SmallText>TakePhoto when your Smiling Percentage above {SMILE_PERCENT}%</SmallText>)
+          }
           <Camera
             style={{
               width: width - 40,
