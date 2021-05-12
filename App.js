@@ -122,7 +122,7 @@ export default () => {
 
   const savePhoto = useCallback(async (uri) => {
     try {
-      //권한요청
+      //권한요청 MediaLibrary 는 따로 요청해야 한다.
       const { status } = await MediaLibrary.requestPermissionsAsync();
       if (status === "granted") {
         //MediaLibrary의 asset을 만들고
